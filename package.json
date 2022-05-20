@@ -1,0 +1,43 @@
+{
+  "version": "0.1.0",
+  "description": "Setup ocvalidate Github Action",
+  "private": true,
+  "main": "lib/index.js",
+  "scripts": {
+    "build": "tsc && ncc build --minify",
+    "format": "ts-standard --fix src/*.ts",
+    "format-check": "ts-standard src/*.ts",
+    "test": "jest --coverage",
+    "pre-checkin": "npm run format && npm run build && npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/brokeyourbike/ocvalidate-action.git"
+  },
+  "keywords": [
+    "actions",
+    "go",
+    "setup",
+    "ocvalidate",
+    "opencore"
+  ],
+  "author": "Ivan Stasiuk <ivan@stasi.uk>",
+  "license": "MPL-2.0",
+  "dependencies": {
+    "@actions/core": "^1.8.2",
+    "@actions/io": "^1.1.2",
+    "@actions/tool-cache": "^2.0.1",
+    "lodash": "^4.17.21",
+    "semver": "^7.3.7"
+  },
+  "standard": {
+    "ignore": "dist/"
+  },
+  "devDependencies": {
+    "@types/node": "^16",
+    "@types/semver": "^7.3.9",
+    "@vercel/ncc": "^0.33.4",
+    "ts-standard": "*",
+    "typescript": "^4.6.4"
+  }
+}

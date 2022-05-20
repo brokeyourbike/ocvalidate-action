@@ -1,0 +1,17 @@
+name: 'Setup ocvalidate'
+description: 'Setup ocvalidate and add it to the PATH'
+author: 'Ivan Stasiuk'
+branding:
+  icon: 'box'
+  color: 'gray-dark'
+inputs:
+  opencore-version:
+    description: 'The OpenCore version to download and use. Exact version should be provided.'
+    required: true
+  token:
+    description: Used to pull releases from OpenCore repo. Since there's a default, this is typically not supplied by the user.
+    default: ${{ github.token }}
+    required: true
+runs:
+  using: 'node16'
+  main: 'dist/index.js'
