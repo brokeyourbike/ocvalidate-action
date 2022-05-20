@@ -1,0 +1,34 @@
+name: validate 'Setup ocvalidate' action
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - '**.md'
+  pull_request:
+    paths-ignore:
+      - '**.md'
+
+jobs:
+  setup-versions:
+    name: setup versions
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-latest, windows-latest, ubuntu-latest]
+        mockery: [0.8.0, 0.7.0]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup ocvalidate ${{ matrix.mockery }}
+        uses: ./
+        with:
+          mockery-version: ${{ matrix.mockery }}
+
+      - name: Verify ocvalidate
+        run: |
+          chmod +x ./__tests__/verify-version.sh
+          ./__tests__/verify-version.sh ${{ matrix.mockery }}
+        shell: bash
