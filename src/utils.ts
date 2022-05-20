@@ -30,10 +30,10 @@ export async function findAndDownload (
     const opencoreDir = await extractOpencoreArchive(downloadPath)
     core.info(`Successfully extracted opencore to ${opencoreDir}`)
 
-    for (const filePath of fs.readdirSync(path.join(opencoreDir, 'Utilities/ocvalidate'))) {
-      console.log(filePath)
-      const os = detectOsForFilename(path.basename(filePath))
-      const file: IOcvalidateVersionFile = { version, filePath, os }
+    const ocvalidateDir = path.join(opencoreDir, 'Utilities/ocvalidate')
+    for (const filename of fs.readdirSync(ocvalidateDir)) {
+      const os = detectOsForFilename(filename)
+      const file: IOcvalidateVersionFile = { version, os, filePath: path.join(ocvalidateDir, filename) }
 
       if (file.os === platform) {
         return file
@@ -64,8 +64,9 @@ export async function cache (
   file: IOcvalidateVersionFile
 ): Promise<string> {
   core.info('Adding to the cache ...')
-  const cachedDir = await tc.cacheDir(
+  const cachedDir = await tc.cacheFile(
     file.filePath,
+    CACHE_KEY,
     CACHE_KEY,
     file.version
   )
