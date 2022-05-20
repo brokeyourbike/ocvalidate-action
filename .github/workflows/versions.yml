@@ -25,7 +25,7 @@ jobs:
       - name: Setup ocvalidate ${{ matrix.mockery }}
         uses: ./
         with:
-          mockery-version: ${{ matrix.mockery }}
+          opencore-version: ${{ matrix.mockery }}
 
       - name: Verify ocvalidate
         run: |
