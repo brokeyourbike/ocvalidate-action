@@ -16,7 +16,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [macos-latest, windows-latest, ubuntu-latest]
+        os: [macos-latest]
         mockery: [0.8.0, 0.7.0]
     steps:
       - name: Checkout
@@ -31,4 +31,4 @@ jobs:
         run: |
           chmod +x ./__tests__/verify-version.sh
           ./__tests__/verify-version.sh ${{ matrix.mockery }}
-        shell: bash
+        shell: zsh
