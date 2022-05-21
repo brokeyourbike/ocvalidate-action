@@ -65,7 +65,7 @@ export async function cache (
   file: IOcvalidateVersionFile
 ): Promise<string> {
   core.info('Is it excutable before cache?')
-  exec.exec(file.filePath, ['--version'])
+  await exec.exec(file.filePath, ['--version'])
 
   core.info('Adding to the cache ...')
   const cachedFile = await tc.cacheFile(
