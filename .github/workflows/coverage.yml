@@ -19,8 +19,8 @@ jobs:
           node-version: 16
           cache: 'npm'
 
-      - name: npm install
-        run: npm ci
+      - run: npm ci
+      - run: git version
 
       - name: Upload coverage to codeclimate
         uses: paambaati/codeclimate-action@v3.0.0
