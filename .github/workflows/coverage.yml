@@ -28,3 +28,4 @@ jobs:
           CC_TEST_REPORTER_ID: ${{ secrets.CODECLIMATE_TOKEN }}
         with:
           coverageCommand: npm test
+          debug: true
