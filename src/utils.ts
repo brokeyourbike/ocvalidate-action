@@ -1,7 +1,8 @@
 import * as fs from 'fs'
 import * as path from 'path'
-import * as tc from '@actions/tool-cache'
 import * as core from '@actions/core'
+import * as exec from '@actions/exec'
+import * as tc from '@actions/tool-cache'
 
 export const CACHE_KEY = 'ocvalidate'
 
@@ -63,6 +64,9 @@ export function detectOsForFilename (filename: string): string {
 export async function cache (
   file: IOcvalidateVersionFile
 ): Promise<string> {
+  core.info('Is it excutable before cache?')
+  exec.exec(file.filePath, ['--version'])
+
   core.info('Adding to the cache ...')
   const cachedFile = await tc.cacheFile(
     file.filePath,
