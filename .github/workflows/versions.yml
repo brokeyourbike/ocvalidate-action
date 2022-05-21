@@ -16,8 +16,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [macos-latest, ubuntu-latest]
-        mockery: [0.8.0]
+        os: [macos-latest, windows-latest, ubuntu-latest]
+        mockery: [0.8.0, 0.7.0]
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -29,6 +29,6 @@ jobs:
 
       - name: Verify ocvalidate
         run: |
-          which ocvalidate
-          file $(which ocvalidate)
+          chmod +x ./__tests__/verify-version.sh
+          ./__tests__/verify-version.sh ${{ matrix.mockery }}
         shell: bash
