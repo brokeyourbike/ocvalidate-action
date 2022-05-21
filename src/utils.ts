@@ -1,7 +1,6 @@
-import * as fs from 'fs'
 import * as path from 'path'
 import * as core from '@actions/core'
-import * as exec from '@actions/exec'
+import * as glob from '@actions/glob'
 import * as tc from '@actions/tool-cache'
 
 export const CACHE_KEY = 'ocvalidate'
@@ -31,10 +30,12 @@ export async function findAndDownload (
     const opencoreDir = await extractOpencoreArchive(downloadPath)
     core.info(`Successfully extracted opencore to ${opencoreDir}`)
 
-    const ocvalidateDir = path.join(opencoreDir, 'Utilities/ocvalidate')
-    for (const filename of fs.readdirSync(ocvalidateDir)) {
-      const os = detectOsForFilename(filename)
-      const file: IOcvalidateVersionFile = { version, os, filePath: path.join(ocvalidateDir, filename) }
+    const searchPath = `${path.join(opencoreDir, 'Utilities/ocvalidate/ocvalidate')}*`
+    const globber = await glob.create(searchPath, {followSymbolicLinks: false})
+
+    for (const filePath of await globber.glob()) {
+      const os = detectOsForFilename(path.basename(filePath))
+      const file: IOcvalidateVersionFile = { version, os, filePath }
 
       if (file.os === platform) {
         return file
@@ -64,9 +65,6 @@ export function detectOsForFilename (filename: string): string {
 export async function cache (
   file: IOcvalidateVersionFile
 ): Promise<string> {
-  core.info('Is it excutable before cache?')
-  await exec.exec(file.filePath, ['--version'])
-
   core.info('Adding to the cache ...')
   const cachedFile = await tc.cacheFile(
     file.filePath,
