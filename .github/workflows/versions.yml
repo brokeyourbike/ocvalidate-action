@@ -29,5 +29,6 @@ jobs:
 
       - name: Verify ocvalidate
         run: |
+          which ocvalidate
           file $(which ocvalidate)
         shell: bash
