@@ -64,14 +64,14 @@ export async function cache (
   file: IOcvalidateVersionFile
 ): Promise<string> {
   core.info('Adding to the cache ...')
-  const cachedDir = await tc.cacheFile(
+  const cachedFile = await tc.cacheFile(
     file.filePath,
     CACHE_KEY,
     CACHE_KEY,
     file.version
   )
-  core.info(`Successfully cached ocvalidate to ${cachedDir}`)
-  return cachedDir
+  core.info(`Successfully cached ocvalidate to ${cachedFile}`)
+  return cachedFile
 }
 
 export async function extractOpencoreArchive (archivePath: string): Promise<string> {

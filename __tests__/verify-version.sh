@@ -5,7 +5,7 @@ if [ -z "$1" ]; then
   exit 1
 fi
 
-ocvalidate_version="$(sudo ocvalidate --version)"
+ocvalidate_version="$(ocvalidate --version)"
 echo "Found 'ocvalidate' version '$ocvalidate_version'"
 
 if [ -z "$(echo $ocvalidate_version | grep $1)" ]; then
