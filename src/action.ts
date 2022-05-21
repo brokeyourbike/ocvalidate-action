@@ -1,4 +1,5 @@
 import * as os from 'os'
+import * as path from 'path'
 import * as core from '@actions/core'
 import * as tc from '@actions/tool-cache'
 import * as utils from './utils'
@@ -29,7 +30,7 @@ export async function run (): Promise<void> {
       ocvalidatePath = await utils.cache(filePath)
     }
 
-    core.addPath(ocvalidatePath)
+    core.addPath(path.dirname(ocvalidatePath))
     core.info('Added ocvalidate to the path')
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Failed to `run`'
