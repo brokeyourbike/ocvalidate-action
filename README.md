@@ -14,7 +14,7 @@ Basic:
 ```yaml
 steps:
   - uses: actions/checkout@v3
-  - uses: brokeyourbike/ocvalidate-action@v0
+  - uses: brokeyourbike/ocvalidate-action@v0.1
     with:
       opencore-version: '0.8.0' # OpenCore version to download and use.
   - run: ocvalidate config.plist | grep -q 'No issues found'
