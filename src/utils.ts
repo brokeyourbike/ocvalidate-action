@@ -31,7 +31,7 @@ export async function findAndDownload (
     core.info(`Successfully extracted opencore to ${opencoreDir}`)
 
     const searchPath = `${path.join(opencoreDir, 'Utilities/ocvalidate/ocvalidate')}*`
-    const globber = await glob.create(searchPath, {followSymbolicLinks: false})
+    const globber = await glob.create(searchPath, { followSymbolicLinks: false })
 
     for (const filePath of await globber.glob()) {
       const os = detectOsForFilename(path.basename(filePath))
