@@ -8,6 +8,10 @@ inputs:
   opencore-version:
     description: 'The OpenCore version to download and use. Exact version should be provided.'
     required: true
+  release:
+    description: 'Should we download release version of the OpenCore.'
+    default: 'true'
+    required: true
   token:
     description: Used to pull releases from OpenCore repo. Since there's a default, this is typically not supplied by the user.
     default: ${{ github.token }}

@@ -4,6 +4,10 @@ import * as glob from '@actions/glob'
 import * as tc from '@actions/tool-cache'
 
 export const CACHE_KEY = 'ocvalidate'
+export const PRODUCTION_OWNER = 'acidanthera'
+export const PRODUCTION_REPO = 'OpenCorePkg'
+export const PRE_PRODUCTION_OWNER = 'dortania'
+export const PRE_PRODUCTION_REPO = 'build-repo'
 
 export interface IOcvalidateVersionFile {
   version: string
@@ -11,23 +15,36 @@ export interface IOcvalidateVersionFile {
   os: string
 }
 
-export function prepareDownloadUrl (version: string): string {
-  return `https://github.com/acidanthera/OpenCorePkg/releases/download/${version}/OpenCore-${version}-RELEASE.zip`
+export function buildType (isRelease: boolean): string {
+  return isRelease ? 'RELEASE' : 'DEBUG'
+}
+
+export function prepareDownloadUrl (version: string, isRelease: boolean): string {
+  return `https://github.com/${PRODUCTION_OWNER}/${PRODUCTION_REPO}/releases/download/${version}/OpenCore-${version}-${buildType(isRelease)}.zip`
+}
+
+export function getPreProductionTagName (smallSha: string): string {
+  return `OpenCorePkg-${smallSha}`
+}
+
+export function getSmallSha (sha: string): string {
+  return sha.slice(0, 7)
 }
 
 export async function findAndDownload (
   version: string,
+  isRelease: boolean,
   platform: string,
   auth: string | undefined
 ): Promise<IOcvalidateVersionFile> {
-  const opencoreUrl = prepareDownloadUrl(version)
+  const opencoreUrl = prepareDownloadUrl(version, isRelease)
 
   try {
     core.info(`Acquiring OpenCore ${version} from ${opencoreUrl}`)
     const downloadPath = await tc.downloadTool(opencoreUrl, undefined, auth)
 
     core.info('Extracting opencore...')
-    const opencoreDir = await extractOpencoreArchive(downloadPath)
+    const opencoreDir = await tc.extractZip(downloadPath)
     core.info(`Successfully extracted opencore to ${opencoreDir}`)
 
     const searchPath = `${path.join(opencoreDir, 'Utilities/ocvalidate/ocvalidate')}*`
@@ -76,6 +93,16 @@ export async function cache (
   return cachedFile
 }
 
-export async function extractOpencoreArchive (archivePath: string): Promise<string> {
-  return await tc.extractZip(archivePath)
+/**
+ * Parses action input to determine is value is true.
+ */
+export const isTrue = (variable: string): boolean => {
+  const lowercase = variable.toLowerCase()
+  return (
+    lowercase === '1' ||
+    lowercase === 't' ||
+    lowercase === 'true' ||
+    lowercase === 'y' ||
+    lowercase === 'yes'
+  )
 }
