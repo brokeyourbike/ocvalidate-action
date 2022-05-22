@@ -41,7 +41,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
+        os: [macos-latest, windows-latest]
         opencore: ['latest']
         release: [true, false]
     steps:
@@ -53,6 +53,7 @@ jobs:
         with:
           opencore-version: ${{ matrix.opencore }}
           release: ${{ matrix.release }}
+          token: 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
 
       - name: Verify ocvalidate
         run: ocvalidate --version | grep 'OpenCore version'
