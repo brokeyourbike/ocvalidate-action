@@ -22,13 +22,6 @@ export async function run (): Promise<void> {
 
     core.info(`Setup ocvalidate from OpenCore version ${opencoreVersion}`)
 
-    let ocvalidatePath: string = tc.find(utils.CACHE_KEY, opencoreVersion)
-    if (ocvalidatePath !== '') {
-      core.info(`Found in cache @ ${ocvalidatePath}`)
-      addToPath(ocvalidatePath)
-      return
-    }
-
     let opencore: utils.IOpenCoreRelease
     if (opencoreVersion === utils.LATEST_VERSION) {
       const octokit = github.getOctokit(token)
@@ -38,11 +31,15 @@ export async function run (): Promise<void> {
       opencore = release.getOpenCoreRelease(opencoreVersion, isRelease)
     }
 
-    const file = await utils.download(opencore, platform)
-
-    if (opencoreVersion !== utils.LATEST_VERSION) {
-      ocvalidatePath = await utils.cache(file)
+    let ocvalidatePath: string = tc.find(utils.CACHE_KEY, utils.getFullVersion(opencore))
+    if (ocvalidatePath !== '') {
+      core.info(`Found in cache @ ${ocvalidatePath}`)
+      addToPath(ocvalidatePath)
+      return
     }
+
+    const file = await utils.download(opencore, platform)
+    ocvalidatePath = await utils.cache(file)
 
     addToPath(ocvalidatePath)
   } catch (err) {

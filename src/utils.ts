@@ -2,6 +2,7 @@ import * as path from 'path'
 import * as core from '@actions/core'
 import * as glob from '@actions/glob'
 import * as tc from '@actions/tool-cache'
+import { type, version } from 'os'
 
 export const CACHE_KEY = 'ocvalidate'
 export const LATEST_VERSION = 'latest'
@@ -27,6 +28,10 @@ export function isValidType (type: string): boolean {
   return type === RELEASE_TYPE || type === DEBUG_TYPE
 }
 
+export function getFullVersion(opencore: IOpenCoreRelease): string {
+  return `${opencore.version}-${opencore.type}`
+}
+
 export async function download (opencore: IOpenCoreRelease, platform: string): Promise<IOcvalidateVersionFile> {
   try {
     core.info(`Acquiring OpenCore ${opencore.version} from ${opencore.downloadUrl}`)
@@ -45,7 +50,7 @@ export async function download (opencore: IOpenCoreRelease, platform: string): P
         continue
       }
 
-      const file: IOcvalidateVersionFile = { version: `${opencore.version}-${opencore.type}`, path: filePath }
+      const file: IOcvalidateVersionFile = { version: getFullVersion(opencore), path: filePath }
       core.info(`Found ocvalidate version ${file.version} in ${file.path}`)
       return file
     }
