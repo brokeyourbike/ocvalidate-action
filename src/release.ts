@@ -10,8 +10,8 @@ function getDownloadUrl (version: string, isRelease: boolean): string {
 
 export function getOpenCoreRelease (version: string, isRelease: boolean): utils.IOpenCoreRelease {
   const release: utils.IOpenCoreRelease = {
-    buildType: utils.getType(isRelease),
-    donloadUrl: getDownloadUrl(version, isRelease),
+    type: utils.getType(isRelease),
+    downloadUrl: getDownloadUrl(version, isRelease),
     version: version
   }
   return release

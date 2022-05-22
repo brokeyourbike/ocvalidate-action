@@ -9,9 +9,9 @@ export const RELEASE_TYPE = 'RELEASE'
 export const DEBUG_TYPE = 'RELEASE'
 
 export interface IOpenCoreRelease {
-  buildType: string
-  donloadUrl: string
+  type: string
   version: string
+  downloadUrl: string
 }
 
 export interface IOcvalidateVersionFile {
@@ -23,10 +23,14 @@ export function getType (isRelease: boolean): string {
   return isRelease ? RELEASE_TYPE : DEBUG_TYPE
 }
 
+export function isValidType (type: string): boolean {
+  return type === RELEASE_TYPE || type === DEBUG_TYPE
+}
+
 export async function download (opencore: IOpenCoreRelease, platform: string): Promise<IOcvalidateVersionFile> {
   try {
-    core.info(`Acquiring OpenCore ${opencore.version} from ${opencore.donloadUrl}`)
-    const downloadPath = await tc.downloadTool(opencore.donloadUrl)
+    core.info(`Acquiring OpenCore ${opencore.version} from ${opencore.downloadUrl}`)
+    const downloadPath = await tc.downloadTool(opencore.downloadUrl)
 
     core.info('Extracting OpenCore...')
     const opencoreDir = await tc.extractZip(downloadPath)
@@ -41,7 +45,7 @@ export async function download (opencore: IOpenCoreRelease, platform: string): P
         continue
       }
 
-      const file: IOcvalidateVersionFile = { version: opencore.version, path: filePath }
+      const file: IOcvalidateVersionFile = { version: `${opencore.version}-${opencore.type}`, path: filePath }
       return file
     }
 
@@ -68,14 +72,14 @@ export function detectPlatformForFilename (filename: string): string {
 export async function cache (
   file: IOcvalidateVersionFile
 ): Promise<string> {
-  core.info('Adding to the cache ...')
+  core.info('Adding ocvalidate to the cache ...')
   const cachedFile = await tc.cacheFile(
     file.path,
     CACHE_KEY,
     CACHE_KEY,
     file.version
   )
-  core.info(`Successfully cached ocvalidate to ${cachedFile}`)
+  core.info(`Successfully cached ocvalidate ${file.version} to ${cachedFile}`)
   return cachedFile
 }
 
@@ -89,4 +93,3 @@ export const isTrue = (variable: string): boolean => {
     lowercase === 'yes'
   )
 }
-

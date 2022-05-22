@@ -16,19 +16,21 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [macos-latest, windows-latest, ubuntu-latest]
-        mockery: [0.8.0, 0.7.0]
+        os: [ubuntu-latest]
+        opencore: [0.8.0, 0.7.0, 'latest']
+        should-receive: [0.8.0, 0.7.0, 0.8.1]
     steps:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Setup ocvalidate ${{ matrix.mockery }}
+      - name: Setup ocvalidate with OpenCore ${{ matrix.opencore }}
         uses: ./
         with:
-          opencore-version: ${{ matrix.mockery }}
+          opencore-version: ${{ matrix.opencore }}
+          token: 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
 
       - name: Verify ocvalidate
         run: |
           chmod +x ./__tests__/verify-version.sh
-          ./__tests__/verify-version.sh ${{ matrix.mockery }}
+          ./__tests__/verify-version.sh ${{ matrix.should-receive }}
         shell: bash
