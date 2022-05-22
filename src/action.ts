@@ -3,73 +3,54 @@ import * as core from '@actions/core'
 import * as github from '@actions/github'
 import * as tc from '@actions/tool-cache'
 import * as utils from './utils'
+import * as release from './release'
+import * as prerelease from './prerelease'
 
 export async function run (): Promise<void> {
   try {
     const platform: string = os.platform()
 
-    const versionSpec = core.getInput('opencore-version')
+    const opencoreVersion = core.getInput('opencore-version')
     const token = core.getInput('token')
     const isRelease = utils.isTrue(core.getInput('release'))
 
-    const auth = token === '' ? undefined : `token ${token}`
-
-    if (versionSpec === '') {
-      core.setFailed('Version is not specified')
+    if (opencoreVersion === '') {
+      core.setFailed('OpenCore version is not specified')
       return
     }
 
-    const octokit = github.getOctokit(token)
+    core.info(`Setup ocvalidate from OpenCore version ${opencoreVersion}`)
 
-    const commits = await octokit.rest.repos.listCommits({
-      owner: 'acidanthera',
-      repo: 'OpenCorePkg',
-      per_page: 1
-    });
-
-    if (commits.data.length < 1) {
-      core.setFailed('Repo acidanthera/OpenCorePkg don\'t have any commits')
-      return
-    }
-
-    const commit = commits.data[0]
-    const smallSha = commit.sha.slice(0, 7)
-    console.log(commit)
-
-    const release = await octokit.rest.repos.getReleaseByTag({
-      owner: 'dortania',
-      repo: 'build-repo',
-      tag: `OpenCorePkg-${smallSha}`,
-    });
-
-    console.log(release)
-
-    const assets = await octokit.rest.repos.listReleaseAssets({
-      owner: 'dortania',
-      repo: 'build-repo',
-      release_id: release.data.id,
-    });
-
-    console.log(assets)
-
-    return
-
-    core.info(`Setup opencore version spec ${versionSpec}`)
-
-    let ocvalidatePath: string
-
-    ocvalidatePath = tc.find(utils.CACHE_KEY, versionSpec)
+    let ocvalidatePath: string = tc.find(utils.CACHE_KEY, opencoreVersion)
     if (ocvalidatePath !== '') {
       core.info(`Found in cache @ ${ocvalidatePath}`)
-    } else {
-      const filePath = await utils.findAndDownload(versionSpec, isRelease, platform, auth)
-      ocvalidatePath = await utils.cache(filePath)
+      addToPath(ocvalidatePath)
+      return
     }
 
-    core.addPath(ocvalidatePath)
-    core.info('Added ocvalidate to the path')
+    let opencore: utils.IOpenCoreRelease
+    if (opencoreVersion === utils.LATEST_VERSION) {
+      const octokit = github.getOctokit(token)
+      const commitSha = await release.getLatestCommitSha(octokit)
+      opencore = await prerelease.findOpenCoreRelease(octokit, commitSha, isRelease)
+    } else {
+      opencore = release.getOpenCoreRelease(opencoreVersion, isRelease)
+    }
+
+    const file = await utils.download(opencore, platform)
+
+    if (opencoreVersion !== utils.LATEST_VERSION) {
+      ocvalidatePath = await utils.cache(file)
+    }
+
+    addToPath(ocvalidatePath)
   } catch (err) {
-    const message = err instanceof Error ? err.message : 'Failed to `run`'
+    const message = err instanceof Error ? err.message : 'Failed to install ocvalidate'
     core.setFailed(message)
   }
+}
+
+function addToPath (path: string): void {
+  core.addPath(path)
+  core.info('Added ocvalidate to the path')
 }

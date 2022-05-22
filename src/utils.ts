@@ -4,69 +4,55 @@ import * as glob from '@actions/glob'
 import * as tc from '@actions/tool-cache'
 
 export const CACHE_KEY = 'ocvalidate'
-export const PRODUCTION_OWNER = 'acidanthera'
-export const PRODUCTION_REPO = 'OpenCorePkg'
-export const PRE_PRODUCTION_OWNER = 'dortania'
-export const PRE_PRODUCTION_REPO = 'build-repo'
+export const LATEST_VERSION = 'latest'
+export const RELEASE_TYPE = 'RELEASE'
+export const DEBUG_TYPE = 'RELEASE'
+
+export interface IOpenCoreRelease {
+  buildType: string
+  donloadUrl: string
+  version: string
+}
 
 export interface IOcvalidateVersionFile {
   version: string
-  filePath: string
-  os: string
+  path: string
 }
 
-export function buildType (isRelease: boolean): string {
-  return isRelease ? 'RELEASE' : 'DEBUG'
+export function getType (isRelease: boolean): string {
+  return isRelease ? RELEASE_TYPE : DEBUG_TYPE
 }
 
-export function prepareDownloadUrl (version: string, isRelease: boolean): string {
-  return `https://github.com/${PRODUCTION_OWNER}/${PRODUCTION_REPO}/releases/download/${version}/OpenCore-${version}-${buildType(isRelease)}.zip`
-}
-
-export function getPreProductionTagName (smallSha: string): string {
-  return `OpenCorePkg-${smallSha}`
-}
-
-export function getSmallSha (sha: string): string {
-  return sha.slice(0, 7)
-}
-
-export async function findAndDownload (
-  version: string,
-  isRelease: boolean,
-  platform: string,
-  auth: string | undefined
-): Promise<IOcvalidateVersionFile> {
-  const opencoreUrl = prepareDownloadUrl(version, isRelease)
-
+export async function download (opencore: IOpenCoreRelease, platform: string): Promise<IOcvalidateVersionFile> {
   try {
-    core.info(`Acquiring OpenCore ${version} from ${opencoreUrl}`)
-    const downloadPath = await tc.downloadTool(opencoreUrl, undefined, auth)
+    core.info(`Acquiring OpenCore ${opencore.version} from ${opencore.donloadUrl}`)
+    const downloadPath = await tc.downloadTool(opencore.donloadUrl)
 
-    core.info('Extracting opencore...')
+    core.info('Extracting OpenCore...')
     const opencoreDir = await tc.extractZip(downloadPath)
-    core.info(`Successfully extracted opencore to ${opencoreDir}`)
+    core.info(`Successfully extracted OpenCore to ${opencoreDir}`)
 
+    core.info('Searching for ocvalidate...')
     const searchPath = `${path.join(opencoreDir, 'Utilities/ocvalidate/ocvalidate')}*`
     const globber = await glob.create(searchPath, { followSymbolicLinks: false })
 
     for (const filePath of await globber.glob()) {
-      const os = detectOsForFilename(path.basename(filePath))
-      const file: IOcvalidateVersionFile = { version, os, filePath }
-
-      if (file.os === platform) {
-        return file
+      if (platform !== detectPlatformForFilename(path.basename(filePath))) {
+        continue
       }
+
+      const file: IOcvalidateVersionFile = { version: opencore.version, path: filePath }
+      return file
     }
 
-    throw new Error(`No file for platform: ${platform}`)
+    throw new Error(`No ocvalidate file found for platform: ${platform}`)
   } catch (err) {
     const errMessage = err instanceof Error ? err.message : ''
-    throw new Error(`Failed to find ${version}: ${errMessage}`)
+    throw new Error(`Failed to download ocvalidate from OpenCore ${opencore.version}: ${errMessage}`)
   }
 }
 
-export function detectOsForFilename (filename: string): string {
+export function detectPlatformForFilename (filename: string): string {
   const target = filename.toLowerCase()
 
   if (target.includes('.linux')) {
@@ -84,7 +70,7 @@ export async function cache (
 ): Promise<string> {
   core.info('Adding to the cache ...')
   const cachedFile = await tc.cacheFile(
-    file.filePath,
+    file.path,
     CACHE_KEY,
     CACHE_KEY,
     file.version
@@ -93,9 +79,6 @@ export async function cache (
   return cachedFile
 }
 
-/**
- * Parses action input to determine is value is true.
- */
 export const isTrue = (variable: string): boolean => {
   const lowercase = variable.toLowerCase()
   return (
@@ -106,3 +89,38 @@ export const isTrue = (variable: string): boolean => {
     lowercase === 'yes'
   )
 }
+
+// export async function findAndDownload (
+//   version: string,
+//   isRelease: boolean,
+//   platform: string,
+//   auth: string | undefined
+// ): Promise<IOcvalidateVersionFile> {
+//   const opencoreUrl = prepareDownloadUrl(version, isRelease)
+
+//   try {
+//     core.info(`Acquiring OpenCore ${version} from ${opencoreUrl}`)
+//     const downloadPath = await tc.downloadTool(opencoreUrl, undefined, auth)
+
+//     core.info('Extracting opencore...')
+//     const opencoreDir = await tc.extractZip(downloadPath)
+//     core.info(`Successfully extracted opencore to ${opencoreDir}`)
+
+//     const searchPath = `${path.join(opencoreDir, 'Utilities/ocvalidate/ocvalidate')}*`
+//     const globber = await glob.create(searchPath, { followSymbolicLinks: false })
+
+//     for (const filePath of await globber.glob()) {
+//       const os = detectOsForFilename(path.basename(filePath))
+//       const file: IOcvalidateVersionFile = { version, os, filePath }
+
+//       if (file.os === platform) {
+//         return file
+//       }
+//     }
+
+//     throw new Error(`No file for platform: ${platform}`)
+//   } catch (err) {
+//     const errMessage = err instanceof Error ? err.message : ''
+//     throw new Error(`Failed to find ${version}: ${errMessage}`)
+//   }
+// }

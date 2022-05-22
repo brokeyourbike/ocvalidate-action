@@ -43,6 +43,6 @@
     "jest-circus": "^28.1.0",
     "ts-jest": "^28.0.2",
     "ts-standard": "*",
-    "typescript": "^4.6.4"
+    "typescript": "<=4.5.0"
   }
 }
