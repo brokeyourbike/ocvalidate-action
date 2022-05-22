@@ -57,5 +57,5 @@ jobs:
       - name: Verify ocvalidate
         run: |
           chmod +x ./__tests__/verify-version.sh
-          ./__tests__/verify-version.sh 'OpenCore version'
+          ./__tests__/verify-version.sh OpenCore
         shell: bash
