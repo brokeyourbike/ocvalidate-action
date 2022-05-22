@@ -28,17 +28,17 @@ export async function findOpenCoreRelease (octokit: Api, sha: string, isRelease:
   for (const a of assets.data) {
     const r: utils.IOpenCoreRelease = {
       downloadUrl: a.browser_download_url,
-      type: getBuildType(a.name),
+      type: getType(a.name),
       version: getVersion(a.name)
     }
 
     if (!utils.isValidType(r.type)) {
-      core.debug(`OpenCore type ${r.type} is not valid`)
+      core.debug(`OpenCore type '${r.type}' is not valid`)
       continue
     }
 
-    if (semver.valid(r.version) !== null) {
-      core.debug(`OpenCore version ${r.type} is not valid`)
+    if (semver.valid(r.version) === null) {
+      core.debug(`OpenCore version '${r.version}' is not valid`)
       continue
     }
 
@@ -50,7 +50,7 @@ export async function findOpenCoreRelease (octokit: Api, sha: string, isRelease:
   throw new Error(`Cannot found OpenCore release matching sha ${sha} and type ${targetType}`)
 }
 
-function getBuildType (filename: string): string {
+function getType (filename: string): string {
   const matches = filename.match(/-(?<type>\w+).zip$/)
   return matches?.length === 2 ? matches[1] : ''
 }
