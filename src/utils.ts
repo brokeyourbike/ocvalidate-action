@@ -6,7 +6,7 @@ import * as tc from '@actions/tool-cache'
 export const CACHE_KEY = 'ocvalidate'
 export const LATEST_VERSION = 'latest'
 export const RELEASE_TYPE = 'RELEASE'
-export const DEBUG_TYPE = 'RELEASE'
+export const DEBUG_TYPE = 'DEBUG'
 
 export interface IOpenCoreRelease {
   type: string
