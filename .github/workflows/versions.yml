@@ -55,5 +55,7 @@ jobs:
           release: ${{ matrix.release }}
 
       - name: Verify ocvalidate
-        run: ocvalidate --version | grep 'OpenCore version'
+        run: |
+          chmod +x ./__tests__/verify-version.sh
+          ./__tests__/verify-version.sh 'OpenCore version'
         shell: bash

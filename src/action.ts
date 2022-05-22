@@ -1,5 +1,4 @@
 import * as os from 'os'
-import * as fs from 'fs'
 import * as core from '@actions/core'
 import * as github from '@actions/github'
 import * as tc from '@actions/tool-cache'
@@ -51,7 +50,4 @@ export async function run (): Promise<void> {
 function addToPath (path: string): void {
   core.addPath(path)
   core.info('Added ocvalidate to the path')
-
-  core.info('Making it executable..')
-  fs.chmodSync(path, 0o755)
 }
