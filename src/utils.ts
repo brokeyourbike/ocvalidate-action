@@ -90,37 +90,3 @@ export const isTrue = (variable: string): boolean => {
   )
 }
 
-// export async function findAndDownload (
-//   version: string,
-//   isRelease: boolean,
-//   platform: string,
-//   auth: string | undefined
-// ): Promise<IOcvalidateVersionFile> {
-//   const opencoreUrl = prepareDownloadUrl(version, isRelease)
-
-//   try {
-//     core.info(`Acquiring OpenCore ${version} from ${opencoreUrl}`)
-//     const downloadPath = await tc.downloadTool(opencoreUrl, undefined, auth)
-
-//     core.info('Extracting opencore...')
-//     const opencoreDir = await tc.extractZip(downloadPath)
-//     core.info(`Successfully extracted opencore to ${opencoreDir}`)
-
-//     const searchPath = `${path.join(opencoreDir, 'Utilities/ocvalidate/ocvalidate')}*`
-//     const globber = await glob.create(searchPath, { followSymbolicLinks: false })
-
-//     for (const filePath of await globber.glob()) {
-//       const os = detectOsForFilename(path.basename(filePath))
-//       const file: IOcvalidateVersionFile = { version, os, filePath }
-
-//       if (file.os === platform) {
-//         return file
-//       }
-//     }
-
-//     throw new Error(`No file for platform: ${platform}`)
-//   } catch (err) {
-//     const errMessage = err instanceof Error ? err.message : ''
-//     throw new Error(`Failed to find ${version}: ${errMessage}`)
-//   }
-// }
