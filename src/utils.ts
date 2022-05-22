@@ -46,6 +46,7 @@ export async function download (opencore: IOpenCoreRelease, platform: string): P
       }
 
       const file: IOcvalidateVersionFile = { version: `${opencore.version}-${opencore.type}`, path: filePath }
+      core.info(`Found ocvalidate version ${file.version} in ${file.path}`)
       return file
     }
 
