@@ -43,5 +43,5 @@ export async function getLatestCommitsSha (octokit: Api): Promise<string[]> {
     throw new Error(`Repo ${OWNER}/${REPO} don't have any commits`)
   }
 
-  return commits.data.map(c => c.sha.slice(0, 7)).reverse()
+  return commits.data.map(c => c.sha.slice(0, 7))
 }
