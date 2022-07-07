@@ -1,4 +1,4 @@
-import { Api } from '@octokit/plugin-rest-endpoint-methods/dist-types/types'
+import type { Api } from '@octokit/plugin-rest-endpoint-methods/dist-types/types'
 import * as utils from './utils'
 
 const OWNER = 'acidanthera'
@@ -30,4 +30,18 @@ export async function getLatestCommitSha (octokit: Api): Promise<string> {
 
   const commit = commits.data[0]
   return commit.sha.slice(0, 7)
+}
+
+export async function getLatestCommitsSha (octokit: Api): Promise<string[]> {
+  const commits = await octokit.rest.repos.listCommits({
+    owner: OWNER,
+    repo: REPO,
+    per_page: 100
+  })
+
+  if (commits.data.length < 1) {
+    throw new Error(`Repo ${OWNER}/${REPO} don't have any commits`)
+  }
+
+  return commits.data.map(c => c.sha.slice(0, 7))
 }

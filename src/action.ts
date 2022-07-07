@@ -1,3 +1,4 @@
+import type { Api } from '@octokit/plugin-rest-endpoint-methods/dist-types/types'
 import * as os from 'os'
 import * as core from '@actions/core'
 import * as github from '@actions/github'
@@ -24,8 +25,7 @@ export async function run (): Promise<void> {
     let opencore: utils.IOpenCoreRelease
     if (opencoreVersion === utils.LATEST_VERSION) {
       const octokit = github.getOctokit(token)
-      const commitSha = await release.getLatestCommitSha(octokit)
-      opencore = await prerelease.findOpenCoreRelease(octokit, commitSha, isRelease)
+      opencore = await findLatestRelease(octokit, opencoreVersion)
     } else {
       opencore = release.getOpenCoreRelease(opencoreVersion, isRelease)
     }
@@ -45,6 +45,23 @@ export async function run (): Promise<void> {
     const message = err instanceof Error ? err.message : 'Failed to install ocvalidate'
     core.setFailed(message)
   }
+}
+
+async function findLatestRelease (octokit: Api, opencoreVersion: string): Promise<utils.IOpenCoreRelease> {
+  let opencore: utils.IOpenCoreRelease
+
+  const commitsSha = await release.getLatestCommitsSha(octokit)
+  for (const commitSha of commitsSha) {
+    try {
+      opencore = await prerelease.findOpenCoreRelease(octokit, commitSha, true)
+      return opencore
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Failed to find latest release'
+      core.debug(message)
+    }
+  }
+
+  throw new Error(`No OpenCore release found for version ${opencoreVersion}`)
 }
 
 function addToPath (path: string): void {

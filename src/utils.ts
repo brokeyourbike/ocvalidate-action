@@ -2,7 +2,6 @@ import * as path from 'path'
 import * as core from '@actions/core'
 import * as glob from '@actions/glob'
 import * as tc from '@actions/tool-cache'
-import { type, version } from 'os'
 
 export const CACHE_KEY = 'ocvalidate'
 export const LATEST_VERSION = 'latest'
@@ -28,7 +27,7 @@ export function isValidType (type: string): boolean {
   return type === RELEASE_TYPE || type === DEBUG_TYPE
 }
 
-export function getFullVersion(opencore: IOpenCoreRelease): string {
+export function getFullVersion (opencore: IOpenCoreRelease): string {
   return `${opencore.version}-${opencore.type}`
 }
 
