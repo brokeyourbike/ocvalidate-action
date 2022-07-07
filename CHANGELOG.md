@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.3.0](https://www.github.com/brokeyourbike/ocvalidate-action/compare/v0.2.0...v0.3.0) (2022-07-07)
+
+
+### Features
+
+* keep searching if latest opencore commit is not build yet ([4a33608](https://www.github.com/brokeyourbike/ocvalidate-action/commit/4a33608fdcdc4b51b0f9a7d41b371ce6addfadd9))
+
+
+### Bug Fixes
+
+* no need to reverse ([a57ea73](https://www.github.com/brokeyourbike/ocvalidate-action/commit/a57ea73cb590b77c8fc1c391034d21e55183face))
+* return commits in reverse order ([648db94](https://www.github.com/brokeyourbike/ocvalidate-action/commit/648db9481664601132d202b50cd93fe088533f2f))
+* update dependencies ([b53e2bd](https://www.github.com/brokeyourbike/ocvalidate-action/commit/b53e2bd48dce82b9a0ddd0fa131470c65cf0b728))
+
 ## [0.2.0](https://www.github.com/brokeyourbike/ocvalidate-action/compare/v0.1.1...v0.2.0) (2022-05-22)
 
 
