@@ -1,23 +1,14 @@
-// For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
-// https://github.com/microsoft/vscode-dev-containers/tree/v0.238.0/containers/typescript-node
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/typescript-node
 {
-	"name": "ocvalidate",
-	"build": {
-		"dockerfile": "Dockerfile",
-		// Update 'VARIANT' to pick a Node version: 18, 16, 14.
-		// Append -bullseye or -buster to pin to an OS version.
-		// Use -bullseye variants on local on arm64/Apple Silicon.
-		"args": {
-			"VARIANT": "16-bullseye"
-		}
-	},
+	"name": "ocvalidate-action",
+	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
+	"image": "mcr.microsoft.com/devcontainers/typescript-node:0-16",
+
+	// Configure tool-specific properties.
 	"customizations": {
 		"vscode": {
-			"extensions": [
-				"dbaeumer.vscode-eslint",
-        "GitHub.copilot"
-			]
+			"extensions": ["GitHub.copilot"]
 		}
-	},
-	"remoteUser": "node"
+	}
 }
