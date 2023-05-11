@@ -1,5 +1,12 @@
 # Changelog
 
+### [0.3.1](https://www.github.com/brokeyourbike/ocvalidate-action/compare/v0.3.0...v0.3.1) (2023-05-11)
+
+
+### Bug Fixes
+
+* update deps ([285fa0a](https://www.github.com/brokeyourbike/ocvalidate-action/commit/285fa0a2f1118bc2affa4dea12b5bfbdd72e25bf))
+
 ## [0.3.0](https://www.github.com/brokeyourbike/ocvalidate-action/compare/v0.2.0...v0.3.0) (2022-07-07)
 
 
