@@ -17,8 +17,15 @@ steps:
   - uses: brokeyourbike/ocvalidate-action@v0.3
     with:
       opencore-version: '0.8.0' # OpenCore version to download and use.
-  - run: ocvalidate config.plist | grep -q 'No issues found'
+  - run: ocvalidate config.plist
 ```
+
+## Arguments
+
+| Input  | Description | Usage |
+| :---:     |     :---:   |    :---:   |
+| `opencore-version`  | OpenCore version to download and use  | *Required |
+| `release`  | Should we download release version of the OpenCore  | Optional |
 
 ## Authors
 
