@@ -25,7 +25,7 @@ steps:
 | Input  | Description | Usage |
 | :---:     |     :---:   |    :---:   |
 | `opencore-version`  | OpenCore version to download and use  | *Required |
-| `release`  | Should we download release version of the OpenCore  | Optional |
+| `release`  | Should we download release version of the OpenCore. Defaults to `true`  | Optional |
 
 ## Authors
 
