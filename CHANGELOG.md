@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.0](https://www.github.com/brokeyourbike/ocvalidate-action/compare/v0.3.1...v0.4.0) (2023-12-09)
+
+
+### Features
+
+* node20 ([bba30a2](https://www.github.com/brokeyourbike/ocvalidate-action/commit/bba30a2dd4428549687d680bac3c5ea403b0c9a7))
+
 ### [0.3.1](https://www.github.com/brokeyourbike/ocvalidate-action/compare/v0.3.0...v0.3.1) (2023-05-11)
 
 
