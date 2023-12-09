@@ -16,7 +16,7 @@ jobs:
 
       - uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 20
 
       - run: npm ci
 
@@ -25,4 +25,3 @@ jobs:
           CC_TEST_REPORTER_ID: ${{ secrets.CODECLIMATE_TOKEN }}
         with:
           coverageCommand: npm test
-          debug: true
