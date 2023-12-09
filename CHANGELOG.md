@@ -1,5 +1,12 @@
 # Changelog
 
+### [0.3.3](https://www.github.com/brokeyourbike/ocvalidate-action/compare/v0.3.2...v0.3.3) (2023-12-09)
+
+
+### Bug Fixes
+
+* ncc ([19c5e63](https://www.github.com/brokeyourbike/ocvalidate-action/commit/19c5e637f7d52b6690b14c02571d58b806cb0431))
+
 ### [0.3.2](https://www.github.com/brokeyourbike/ocvalidate-action/compare/v0.3.1...v0.3.2) (2023-12-09)
 
 
