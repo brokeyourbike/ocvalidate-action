@@ -5,8 +5,8 @@
   "main": "lib/index.js",
   "scripts": {
     "build": "ncc build src/index.ts --minify",
-    "format": "ts-standard --fix src/*.ts",
-    "format-check": "ts-standard src/*.ts",
+    "fmt:fix": "ts-standard --fix src/*.ts",
+    "fmt": "ts-standard src/*.ts",
     "test": "jest --coverage",
     "pre-checkin": "npm run format && npm run build && npm test"
   },
@@ -36,7 +36,7 @@
   },
   "devDependencies": {
     "@types/jest": "^27.5.1",
-    "@types/node": "^16",
+    "@types/node": "^20",
     "@types/semver": "^7.3.9",
     "@vercel/ncc": "^0.34",
     "jest": "^28.1.0",
