@@ -21,11 +21,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v6
 
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v6
         with:
-          node-version: 20
+          node-version-file: '.nvmrc'
+          cache: 'npm'
 
       - run: npm ci
 
@@ -42,7 +43,7 @@ jobs:
         id: diff
 
       # If index.js was different than expected, upload the expected version as an artifact
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v6
         if: ${{ failure() && steps.diff.conclusion == 'failure' }}
         with:
           name: dist

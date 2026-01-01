@@ -20,7 +20,7 @@ jobs:
         opencore: [0.9.0, 0.8.0, 0.7.0]
         release: [true, false]
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v6
 
       - name: Setup ocvalidate with OpenCore ${{ matrix.opencore }}
         uses: ./
@@ -44,7 +44,7 @@ jobs:
         opencore: ['latest']
         release: [true, false]
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v6
 
       - name: Setup ocvalidate with OpenCore ${{ matrix.opencore }}
         uses: ./

@@ -1,8 +1,7 @@
 # ocvalidate-action
 
 [![Latest Stable Version](https://img.shields.io/github/v/release/brokeyourbike/ocvalidate-action)](https://github.com/brokeyourbike/ocvalidate-action/releases)
-[![Maintainability](https://api.codeclimate.com/v1/badges/e42026748cce6e8b194d/maintainability)](https://codeclimate.com/github/brokeyourbike/ocvalidate-action/maintainability)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/e42026748cce6e8b194d/test_coverage)](https://codeclimate.com/github/brokeyourbike/ocvalidate-action/test_coverage)
+[![codecov](https://codecov.io/gh/brokeyourbike/ocvalidate-action/graph/badge.svg?token=aDlna5X49t)](https://codecov.io/gh/brokeyourbike/ocvalidate-action)
 
 Set up your GitHub Actions workflow with a specific version of [ocvalidate](https://github.com/acidanthera/OpenCorePkg/tree/master/Utilities/ocvalidate) from the [OpenCore](https://github.com/acidanthera/OpenCorePkg)
 
@@ -13,8 +12,8 @@ See [action.yml](action.yml)
 Basic:
 ```yaml
 steps:
-  - uses: actions/checkout@v3
-  - uses: brokeyourbike/ocvalidate-action@v0.3
+  - uses: actions/checkout@v6
+  - uses: brokeyourbike/ocvalidate-action@v0.4
     with:
       opencore-version: '0.8.0' # OpenCore version to download and use.
   - run: ocvalidate config.plist
