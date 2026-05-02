@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.4.2](https://github.com/brokeyourbike/ocvalidate-action/compare/v0.4.1...v0.4.2) (2026-05-02)
+
+
+### Bug Fixes
+
+* build ([ab01108](https://github.com/brokeyourbike/ocvalidate-action/commit/ab01108d78157291cd4873b3677fa18454231033))
+* no minify ([a0de599](https://github.com/brokeyourbike/ocvalidate-action/commit/a0de599261b6d0d81b63dafaa6dda9e21ddf97ec))
+* revert ([e8db729](https://github.com/brokeyourbike/ocvalidate-action/commit/e8db72945536c2d3e5b83efa8e34367a5ff20941))
+
 ## [0.4.1](https://github.com/brokeyourbike/ocvalidate-action/compare/v0.4.0...v0.4.1) (2026-03-10)
 
 
