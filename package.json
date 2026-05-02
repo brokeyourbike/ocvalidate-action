@@ -3,10 +3,11 @@
   "description": "Setup ocvalidate Github Action",
   "private": true,
   "main": "lib/index.js",
+  "type": "module",
   "scripts": {
-    "build": "ncc build src/index.ts --minify",
-    "fmt:fix": "prettier **/*.ts --write",
-    "test": "jest --coverage"
+    "build": "esbuild src/index.ts --bundle --platform=node --target=node24 --format=esm --outfile=dist/index.js --minify",
+    "format": "prettier **/*.ts --write",
+    "test": "NODE_OPTIONS='--experimental-vm-modules' jest --coverage"
   },
   "repository": {
     "type": "git",
